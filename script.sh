@@ -5,7 +5,11 @@ pkg_name="record"
 pkg_version="${RECORD_VERSION:-latest}"
 
 repo="${REPO_ROOT:-.}"
-predicted_tests_file="${PREDICTED_TESTS_FILE:-/tmp/predicted-tests.json}"
+predicted_file="${PREDICTED_FILE:-/tmp/testlab-predicted.txt}"
+# shellcheck disable=SC2153
+list_command="${LIST_COMMAND}"
+# shellcheck disable=SC2153
+runner="${RUNNER}"
 
 trap "cleanup" EXIT
 
@@ -50,4 +54,6 @@ set +x
 
 echo "::endgroup::"
 
-"./${pkg_name}" predict --repo "$repo" --predicted-tests-file "$predicted_tests_file"
+bash -c "$list_command" |
+	"./${pkg_name}" predict --repo "$repo" --runner "$runner" \
+		>"$predicted_file"

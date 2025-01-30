@@ -25,10 +25,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
       - name: Test action
         uses: ./
         with:
           continue-on-error: false
+          runner: go-test
+          list-command: go test -list="Test|Example" ./...
+
         env:
-          TESTLAB_GROUP: unit
+          TESTLAB_GROUP: predict-unit
           TESTLAB_KEY: ${{ secrets.TESTLAB_KEY }}

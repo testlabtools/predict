@@ -2,10 +2,16 @@ name: TestLab Predict
 description: Predict CI results
 
 inputs:
-  predicted-tests-file:
+  predicted-file:
     description: Path to the predicted tests file.
-    default: /tmp/predicted-tests.json
+    default: /tmp/testlab-predicted.txt
     required: false
+  runner:
+    description: Name of the test runner format.
+    required: true
+  list-command:
+    description: Command to list test names used as input for prediction.
+    required: true
   repo-root:
     description: Root directory of the repository.
     required: false
@@ -23,5 +29,7 @@ runs:
       shell: bash
       continue-on-error: ${{ fromJSON(inputs.continue-on-error) }}
       env:
-        PREDICTED_TESTS_FILE: ${{ inputs.predicted-tests-file }}
+        PREDICTED_FILE: ${{ inputs.predicted-file }}
+        LIST_COMMAND: ${{ inputs.list-command }}
+        RUNNER: ${{ inputs.runner }}
         REPO_ROOT: ${{ inputs.repo-root || github.workspace }}
